@@ -4,4 +4,6 @@ using UnityEngine;
 
 public class Life : MonoBehaviour {
 
+    public ComputeShader lifeCompute;
+
 }
