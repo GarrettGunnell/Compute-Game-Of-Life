@@ -4,10 +4,11 @@
 #include "Random.cginc"
 
 RWTexture2D<float4> _Result;
+float _RandSeed;
 
 [numthreads(8, 8, 1)]
 void Seed(uint3 id : SV_DispatchThreadID) {
-    initRand(id.x * id.y);
+    initRand(_RandSeed + id.x * id.y);
     _Result[id.xy] = randValue() < 0.7 ? 1 : 0;
 }
 
