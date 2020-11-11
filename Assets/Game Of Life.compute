@@ -11,7 +11,29 @@ void Seed(uint3 id : SV_DispatchThreadID) {
     Result[id.xy] = randValue() < 0.01 ? 1 : 0;
 }
 
+float4 SampleNeighbor(uint x, uint y) {
+    uint3 id = uint3(x, y, 1);
+    return Result[id.xy];
+}
+
+int SampleNeighbors(uint3 uv) {
+    int fertility = 0;
+    if (any(SampleNeighbor(uv.x - 1, uv.y - 1))) ++fertility;
+    if (any(SampleNeighbor(uv.x, uv.y - 1))) ++fertility;
+    if (any(SampleNeighbor(uv.x + 1, uv.y - 1))) ++fertility;
+    if (any(SampleNeighbor(uv.x - 1, uv.y))) ++fertility;
+    if (any(SampleNeighbor(uv.x + 1, uv.y))) ++fertility;
+    if (any(SampleNeighbor(uv.x - 1, uv.y + 1))) ++fertility;
+    if (any(SampleNeighbor(uv.x + 1, uv.y + 1))) ++fertility;
+
+    return fertility;
+}
+
 [numthreads(8, 8, 1)]
 void NewGeneration(uint3 id : SV_DispatchThreadID) {
-    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+    float alive = any(Result[id.xy]);
+    uint3 uv = id;
+    int fertility = SampleNeighbors(uv);
+
+    Result[id.xy] = any(Result[id.xy - 1].r) ? 1 : 0;
 }

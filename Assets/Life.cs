@@ -7,9 +7,9 @@ public class Life : MonoBehaviour {
     public ComputeShader lifeCompute;
 
     private RenderTexture target;
-    private kernel, threadGroupsX, threadGroupsY;
+    private int kernel, threadGroupsX, threadGroupsY;
 
-    private Awake() {
+    private void Awake() {
         if (target == null) {
             target = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             target.enableRandomWrite = true;
