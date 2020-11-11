@@ -17,7 +17,7 @@ public class Life : MonoBehaviour {
         }
 
         kernel = lifeCompute.FindKernel("Seed");
-        lifeCompute.SetTexture(kernel, "Result", target);
+        lifeCompute.SetTexture(kernel, "_Result", target);
         threadGroupsX = Mathf.CeilToInt(Screen.width / 8.0f);
         threadGroupsY = Mathf.CeilToInt(Screen.height / 8.0f);
         lifeCompute.Dispatch(kernel, threadGroupsX, threadGroupsY, 1);
@@ -25,8 +25,8 @@ public class Life : MonoBehaviour {
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination) {
         kernel = lifeCompute.FindKernel("NewGeneration");
-        lifeCompute.SetTexture(kernel, "Result", target);
-        lifeCompute.Dispatch(kernel, threadGroupsX, threadGroupsY, 1);       
+        lifeCompute.SetTexture(kernel, "_Result", target);
+        lifeCompute.Dispatch(kernel, threadGroupsX, threadGroupsY, 1);
 
         Graphics.Blit(target, destination);
     }
