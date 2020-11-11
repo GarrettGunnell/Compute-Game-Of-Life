@@ -15,10 +15,11 @@ public class Life : MonoBehaviour {
             target.Create();
         }
 
-        lifeCompute.SetTexture(0, "Result", target);
+        int kernel = lifeCompute.FindKernel("Seed");
+        lifeCompute.SetTexture(kernel, "Result", target);
         int threadGroupsX = Mathf.CeilToInt(Screen.width / 8.0f);
         int threadGroupsY = Mathf.CeilToInt(Screen.height / 8.0f);
-        lifeCompute.Dispatch(0, threadGroupsX, threadGroupsY, 1);
+        lifeCompute.Dispatch(kernel, threadGroupsX, threadGroupsY, 1);
 
         Graphics.Blit(target, destination);
     }
