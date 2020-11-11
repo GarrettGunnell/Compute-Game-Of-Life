@@ -8,7 +8,7 @@ RWTexture2D<float4> Result;
 [numthreads(8, 8, 1)]
 void Seed(uint3 id : SV_DispatchThreadID) {
     initRand(id.x * id.y);
-    Result[id.xy] = randValue();
+    Result[id.xy] = randValue() < 0.01 ? 1 : 0;
 }
 
 [numthreads(8, 8, 1)]
