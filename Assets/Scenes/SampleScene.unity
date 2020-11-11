@@ -218,3 +218,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeCompute: {fileID: 7200000, guid: 0063856806f45ed41ad5fca087f48f96, type: 3}
+  seedChance: 0.5
