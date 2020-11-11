@@ -8,7 +8,7 @@ RWTexture2D<float4> Result;
 [numthreads(8, 8, 1)]
 void Seed(uint3 id : SV_DispatchThreadID) {
     initRand(id.x * id.y);
-    Result[id.xy] = randValue() < 0.01 ? 1 : 0;
+    Result[id.xy] = randValue() < 0.05 ? 1 : 0;
 }
 
 float4 SampleNeighbor(uint x, uint y) {
@@ -29,11 +29,17 @@ int SampleNeighbors(uint3 uv) {
     return fertility;
 }
 
+float4 DetermineState(bool alive, int fertility) {
+    if (alive && fertility >= 2) return 1;
+    else if (!alive && fertility >= 3) return 1;
+    else return 0;
+}
+
 [numthreads(8, 8, 1)]
 void NewGeneration(uint3 id : SV_DispatchThreadID) {
-    float alive = any(Result[id.xy]);
+    bool alive = any(Result[id.xy]);
     uint3 uv = id;
     int fertility = SampleNeighbors(uv);
 
-    Result[id.xy] = any(Result[id.xy - 1].r) ? 1 : 0;
+    Result[id.xy] = DetermineState(alive, fertility);
 }
